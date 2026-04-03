@@ -27,7 +27,7 @@ pytz==2025.2
     # via singer-python
 requests==2.32.4
     # via tap-intercom (setup.py)
-simplejson==3.11.1
+simplejson==3.20.2
     # via singer-python
 singer-python==6.0.1
     # via tap-intercom (setup.py)
