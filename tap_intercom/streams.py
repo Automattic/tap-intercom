@@ -724,6 +724,7 @@ class Contacts(IncrementalStream):
     # addressable_list_fields = ['tags', 'notes', 'companies']
     addressable_list_fields = ['tags', 'companies']
     to_write_intermediate_bookmark = True
+    child = 'contact_details'
 
     def get_addressable_list(self, contact_list: dict, stream_metadata: dict) -> dict:
         params = {
@@ -901,6 +902,22 @@ class Teams(FullTableStream):
             yield from response.get(self.data_key,  [])
 
 
+class ContactDetails(BaseStream):
+    """
+    Retrieve full contact details for each contact via the Get Contact endpoint.
+
+    Docs: https://developers.intercom.com/docs/references/rest-api/api.intercom.io/contacts/showcontact
+    """
+    tap_stream_id = 'contact_details'
+    key_properties = ['id']
+    path = 'contacts/{}'
+    replication_method = 'INCREMENTAL'
+    replication_key = 'updated_at'
+    valid_replication_keys = ['updated_at']
+    parent = Contacts
+    data_key = 'contact_details'
+
+
 STREAMS = {
     "admin_list": AdminList,
     "admins": Admins,
@@ -911,6 +928,7 @@ STREAMS = {
     "conversation_parts": ConversationParts,
     "contact_attributes": ContactAttributes,
     "contacts": Contacts,
+    "contact_details": ContactDetails,
     "segments": Segments,
     "tags": Tags,
     "teams": Teams
